@@ -1,34 +1,42 @@
 <?php
+
 /**
  * Class de connexion à la BDD
  */
 class Database {
+
     private $pdo;
+
     public function __construct()
     {
         $this->pdo = new PDO("mysql:host=localhost:3308;dbname=banque", 'root', '');
         $this->app=new App();
     }
+
     /**
      * Get informations from Db
      *
      * @param string $statement
      * @param boolean $one
      */
-    public function queryReturn ($statement, $one=false)
+    public function query ($statement, $one=false)
     {
         try {
             $state = $this->pdo->query($statement, PDO::FETCH_OBJ);
-            if ($one) {   
+
+            if ($one) {
                 $data = $state->fetch();
             } else {
                 $data = $state->fetchAll();
             }
+
             $this->app->sendData("Informations récupérées", true, $data);
         } catch (\Throwable $th) {
             $this->app->sendData(" Erreur lors de la récupération des informations");
+
         }
     }
+
     /**
      * Save data in Db
      *
@@ -39,7 +47,12 @@ class Database {
     public function prepare($statement, $action, $param = array()){
         try {
             $state = $this->pdo->prepare($statement);
-            $state->execute($param);
+            $data = array();
+            foreach ($param as $key => $value) {
+                $data[$key] = htmlspecialchars($value);
+            }
+            $state->execute($data);
+
             if ($action === "save") {
                 $message = "Données enregistrées";
             } elseif ($action === "delete"){
@@ -47,6 +60,7 @@ class Database {
             } elseif ($action === "put"){
                 $message = "Données modifiées";
             }
+
             $this->app->sendData($message, true);
         } catch (\Throwable $th) {
             $this->app->sendData(" Erreur lors de l'enregistrement");

@@ -1,8 +1,12 @@
 <?php
+
 require "Database.php";
+
 class General {
+
     public $db;
     protected $table;
+
     public function __construct()
     {
         $this->db = new Database();
@@ -16,6 +20,7 @@ class General {
     {
         $this->db->query("SELECT * FROM $this->table");
     }
+
     /**
      * Get one line of information
      *
@@ -25,6 +30,7 @@ class General {
     {
         $this->db->query("SELECT * FROM $this->table WHERE id=$id", true);
     }
+
     /**
      * Save informations in Db
      *
@@ -40,13 +46,12 @@ class General {
         }
         $statement = substr($statement, 0, -2) . ") ";
         $values = substr($values, 0, -2) . ")";
+
         $statement .= $values;
-        $data = array();
-        foreach ($param as $key => $value) {
-            $data[$key] = htmlspecialchars($value);
-        }
-        $this->db->prepare($statement, "save", $data);
+        var_dump($statement);
+        // $this->db->prepare($statement, "save", $param);
     }
+
     /**
      * delete one line in categorie
      *
@@ -57,6 +62,7 @@ class General {
         $statement = "DELETE FROM $this->table WHERE id=$id";
         $this->db->prepare($statement, "delete");
     }
+
     /**
      * Modify data in categorie
      *
@@ -66,10 +72,12 @@ class General {
     public function put($id, $param){
         $put = explode(",", $param);
         $data= array();
+
         foreach ($put as $value) {
             $elmt = explode(":", $value);
             $data[$elmt[0]] = $elmt[1];
         }
+
         $statement = "UPDATE $this->table SET ";
         foreach ($data as $key => $value) {
             $statement .= $key."=".$value.", ";
