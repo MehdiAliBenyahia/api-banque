@@ -10,6 +10,7 @@ class General {
     public function __construct()
     {
         $this->db = new Database();
+        $this->app = new App();
         // $this->table = strtolower($this->table);
     }
     /**
@@ -48,8 +49,13 @@ class General {
         $values = substr($values, 0, -2) . ")";
 
         $statement .= $values;
-        var_dump($statement);
-        // $this->db->prepare($statement, "save", $param);
+
+        $data = array();
+        foreach ($param as $key => $value) {
+            $data[$key] = htmlspecialchars($value);
+        }
+
+        $this->db->prepare($statement, "save", $data);
     }
 
     /**
