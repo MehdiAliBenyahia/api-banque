@@ -1,5 +1,8 @@
 <?php
 
+use Firebase\JWT\JWT;
+
+require "vendor/autoload.php";
 require 'App.php';
 $app = new App();
 
@@ -16,6 +19,14 @@ if (key_exists("page", $_GET)) {
     require $page.".php";
     $class = new $page();
 
+    $token = "";
+    if (key_exists("token", $_COOKIE)) {
+        $token = $_COOKIE["token"];
+        $decoded = JWT::decode($token, "demo", array('HS256'));
+        if ($decoded->exp > time()) {
+            var_dump($decoded);
+        }
+    }
 
     require 'router.php';
 
