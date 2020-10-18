@@ -29,6 +29,7 @@ if (key_exists("page", $_GET)) {
     }
 
     require 'router.php';
+    //require 'routerUser.php';
 
 } else {
     $app->sendData("Erreur de choix de table");
