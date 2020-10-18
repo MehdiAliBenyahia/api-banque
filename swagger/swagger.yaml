@@ -1,0 +1,9 @@
+openapi: 3.0.0
+info:
+  title: "Mon API banque"
+  description: "Une api pour gérer les relations bancaires"
+  version: '0.1'
+servers:
+  _
+    url: 'localhost/api-banque'
+    description: 'Racine d''url de l''api"
